@@ -1,0 +1,190 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-size: 16px;
+  }
+  body {
+    @apply bg-canvas text-slate-800 font-sans antialiased;
+    font-feature-settings: 'kern';
+  }
+  /* Tipografía base con buena legibilidad */
+  p, li, label, span {
+    line-height: 1.5;
+  }
+  h1, h2, h3 {
+    line-height: 1.2;
+    @apply font-display tracking-tight;
+  }
+}
+
+@layer components {
+  /* Foco visible consistente para accesibilidad WCAG AA */
+  :focus-visible {
+    outline: 3px solid #0E7C80;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  /* Clase para aumentar texto */
+  html.text-large {
+    font-size: 19px;
+  }
+  html.text-xlarge {
+    font-size: 22px;
+  }
+
+  /* Saltar al contenido */
+  .skip-link {
+    position: absolute;
+    left: 0.5rem;
+    top: -3rem;
+    z-index: 100;
+    background: #1B4596;
+    color: white;
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    transition: top 0.2s;
+  }
+  .skip-link:focus {
+    top: 0.5rem;
+  }
+}
+
+/* Animación de toasts */
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.toast-enter {
+  animation: toast-in 0.25s ease-out;
+}
+
+/* Animación suave de modales */
+@keyframes modal-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+.modal-enter {
+  animation: modal-in 0.18s ease-out;
+}
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.overlay-enter {
+  animation: overlay-in 0.18s ease-out;
+}
+
+/* Scroll suave pero discreto */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+/* ============================================================
+   Estilo "Aurora" — efectos visuales
+   ============================================================ */
+
+/* Texto con degradado turquesa → amarillo */
+.text-aurora {
+  background: linear-gradient(100deg, #4FD4D6 0%, #8EE6E6 40%, #FFC93C 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Borde con degradado (para tarjetas destacadas) */
+.border-aurora {
+  border: 1px solid transparent;
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(120deg, #22B8BC, #5C89DB, #FFC93C) border-box;
+}
+
+/* Vidrio esmerilado sobre fondos oscuros */
+.glass-dark {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Manchas de luz animadas (aurora) */
+@keyframes aurora-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(8%, 6%) scale(1.15); }
+}
+@keyframes aurora-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1.1); }
+  50% { transform: translate(-10%, 4%) scale(0.95); }
+}
+@keyframes aurora-drift-3 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(4%, -8%) scale(1.2); }
+}
+.aurora-blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.55;
+  will-change: transform;
+}
+.aurora-blob-1 { animation: aurora-drift-1 18s ease-in-out infinite; }
+.aurora-blob-2 { animation: aurora-drift-2 22s ease-in-out infinite; }
+.aurora-blob-3 { animation: aurora-drift-3 26s ease-in-out infinite; }
+
+/* Textura de ruido sutil para que el degradado no se vea plano */
+.noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Flotación suave para tarjetas del hero */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.float-slow { animation: float-y 7s ease-in-out infinite; }
+.float-slower { animation: float-y 9s ease-in-out infinite; }
+
+/* Aparición al cargar */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise-in { animation: rise-in 0.7s cubic-bezier(.2,.7,.2,1) both; }
+.rise-in-2 { animation: rise-in 0.7s 0.12s cubic-bezier(.2,.7,.2,1) both; }
+.rise-in-3 { animation: rise-in 0.7s 0.24s cubic-bezier(.2,.7,.2,1) both; }
+
+/* Brillo que sigue al mouse dentro de una tarjeta */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+}
+.spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(34, 184, 188, 0.16), transparent 45%);
+}
+.spotlight-card:hover::before { opacity: 1; }
+
+/* Accesibilidad: si la persona pidió reducir movimiento, todo queda quieto */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
